@@ -1,0 +1,105 @@
+<div class="container">
+  <h1>{{title}}</h1>
+
+  <h4 *ngIf="languages.length == 0">Loading...</h4>
+  <form *ngIf="languages.length > 0" class="border p-3 needs-validation" #form="ngForm" (submit)="submitForm(form)">
+
+    <div class="p-2 mb-3 border">
+      Model: {{employeeModel | json}}
+      <br />
+      Angular: {{form.value | json}}
+    </div>
+
+    <!-- first name section -->
+    <div class="form-group">
+
+      <label for="firstNameId" class="control-label">First Name</label>
+
+      <input #firstName="ngModel" id="firstNameId" type="text" class="form-control" pattern=".....+" required
+        name="firstName" [ngModel]="employeeModel.firstName" (ngModelChange)="setFirstName($event)" />
+
+      <div *ngIf="firstName.invalid && firstName.dirty" class="alert alert-danger mt-1">
+        First Name is required
+      </div>
+
+    </div>
+
+    <div class="border mt-3 p-3">
+      <h5>First Name Classes</h5>
+      <div><b>isTouched:</b> {{ firstName.touched }}</div>
+      <div><b>isDirty:</b> {{ firstName.dirty }}</div>
+      <div><b>isInvalid:</b> {{ firstName.invalid }}</div>
+    </div>
+
+    <!-- last name section -->
+    <label for="lastNameId" class="mt-3">Last Name</label>
+    <input id="lastNameId" type="text" class="form-control" required name="lastName" [ngModel]="employeeModel.lastName"
+      (ngModelChange)="setLastName($event)" />
+
+    <!-- full time section -->
+    <div class="checkbox mt-3">
+      <label>
+        <input type="checkbox" name="isFulltime" [(ngModel)]="employeeModel.isFulltime">
+        Fulltime Employee
+      </label>
+    </div>
+
+    <!-- payment type section -->
+    <label class="font-weight-bold">Payment Type</label>
+    <div class="row">
+      <div class="col-3 radio">
+        <label>
+          <input type="radio" name="paymentType" value="Company" checked [(ngModel)]="employeeModel.paymentType">
+          Company
+        </label>
+      </div>
+      <div class="col-3 radio">
+        <label>
+          <input type="radio" name="paymentType" value="Govenment" checked [(ngModel)]="employeeModel.paymentType">
+          Govenment
+        </label>
+      </div>
+    </div>
+
+    <!-- language option section -->
+    <div class="form-group">
+      <label class="font-weight-bold">Primary Language</label>
+      <select #primaryLanguage="ngModel" class="form-control" name="primaryLanguage"
+        [(ngModel)]="employeeModel.primaryLanguage" (blur)="validateLanguage(primaryLanguage.value)"
+        (change)="validateLanguage(primaryLanguage.value)">
+        <option value="default">Select a language ...</option>
+        <option *ngFor="let lang of languages">
+          {{lang}}
+        </option>
+      </select>
+      <div *ngIf="hasLanguageError" class="alert alert-danger mt-1">
+        Please select a language.
+      </div>
+    </div>
+
+    <!-- date hired section -->
+    <div class="form-group">
+      <label class="font-weight-bold">Date Hired</label>
+      <input type="date" class="form-control" />
+    </div>
+
+    <!-- color section -->
+    <div class="form-group">
+      <label class="font-weight-bold">Color</label>
+      <input type="color" class="form-control w-25" />
+    </div>
+
+    <button class="btn btn-primary" type="submit" [disabled]="form.invalid">OK</button>
+
+    <div class="border mt-3 p-3">
+      <h5>Form Classes</h5>
+      <div><b>isTouched:</b> {{ form.touched }}</div>
+      <div><b>isDirty:</b> {{ form.dirty }}</div>
+      <div><b>isInvalid:</b> {{ form.invalid }}</div>
+    </div>
+
+  </form>
+
+</div>
+
+<router-outlet></router-outlet>
